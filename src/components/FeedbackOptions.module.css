@@ -1,0 +1,10 @@
+.feedbackOptionsList {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feedbackOptionsList li:not(:last-child) {
+  margin-right: 15px;
+}
