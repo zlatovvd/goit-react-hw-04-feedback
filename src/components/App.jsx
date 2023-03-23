@@ -4,33 +4,34 @@ import Section from './Section/Section';
 import Statistics from './Statistics/Statistics';
 import Notification from './Notification/Notification';
 
+const feedbackList = [
+  { id: 'good', title: 'Good' },
+  { id: 'neutral', title: 'Neutral' },
+  { id: 'bad', title: 'Bad' },
+];
+
 const App = () => {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const [feedbacks, setFeedbacks] = useState({
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  });
 
   const onLeaveFeedback = feedback => {
-
-    switch (feedback) {
-      case 'Good':
-        setGood(prevState => prevState + 1);
-        break;
-      case 'Neutral':
-        setNeutral(prevState => prevState + 1);
-        break;
-      case 'Bad':
-        setBad(prevState => prevState + 1);
-        break;
-      default:
-    }
+    setFeedbacks(prevState => ({
+      ...prevState,
+      [feedback]: prevState[feedback] + 1,
+    }));
   };
 
   const countTotalFeedback = () => {
-    return good + neutral + bad;
+    return Object.values(feedbacks).reduce((prevValue, number) => {
+      return prevValue + number;
+    }, 0);
   };
 
   const countPositiveFeedbackPercentage = () => {
-    return Math.round((good / countTotalFeedback()) * 100);
+    return Math.round((feedbacks.good / countTotalFeedback()) * 100);
   };
 
   return (
@@ -44,7 +45,7 @@ const App = () => {
     >
       <Section title="Please leave feedback">
         <FeedbackOptions
-          options={['Good', 'Neutral', 'Bad']}
+          options={feedbackList}
           onLeaveFeedback={onLeaveFeedback}
         />
       </Section>
@@ -52,9 +53,8 @@ const App = () => {
       <Section title="Statistics">
         {countTotalFeedback() > 0 ? (
           <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
+            feedbackList={feedbackList}
+            feedbacks={feedbacks}
             total={countTotalFeedback()}
             positivePercentage={countPositiveFeedbackPercentage()}
           />

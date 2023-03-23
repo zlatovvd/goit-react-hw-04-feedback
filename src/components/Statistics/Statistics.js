@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import css from './Statistics.module.css';
 
-const Statistics = ({ good, neutral, bad, total, positivePercentage }) => (
+const Statistics = ({ feedbackList, feedbacks, total, positivePercentage }) => (
   <ul className={css.statisticsList}>
-    <li>Good: {good}</li>
-    <li>Neutral: {neutral}</li>
-    <li>Bad: {bad}</li>
+    {feedbackList.map(({ id, title }) => (
+      <li key={id}>
+        {title}: {feedbacks[id]}
+      </li>
+    ))}
     <li>Total: {total}</li>
     <li>Positive Feedback: {positivePercentage}%</li>
   </ul>
@@ -14,9 +16,17 @@ const Statistics = ({ good, neutral, bad, total, positivePercentage }) => (
 export default Statistics;
 
 Statistics.propTypes = {
-  good: PropTypes.number.isRequired,
-  neutral: PropTypes.number.isRequired,
-  bad: PropTypes.number.isRequired,
+  feedbackList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  feedbacks: PropTypes.shape({
+    good: PropTypes.number.isRequired,
+    neutral: PropTypes.number.isRequired,
+    bad: PropTypes.number.isRequired,
+  }).isRequired,
   total: PropTypes.number.isRequired,
   positivePercentage: PropTypes.number.isRequired,
 };
